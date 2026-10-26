@@ -1,0 +1,106 @@
+{
+  "generated_at": "2026-10-26T12:07:50Z",
+  "monitors": [
+    {
+      "id": "blog",
+      "name": "博客主站",
+      "url": "https://liyueovo.top/",
+      "group": "网站",
+      "timeout_seconds": 20,
+      "expected_status": [
+        200,
+        204,
+        301,
+        302,
+        307,
+        308
+      ],
+      "ok": true,
+      "http_status": 200,
+      "response_ms": 1020,
+      "error": null,
+      "last_check": "2026-10-26T12:07:50Z"
+    },
+    {
+      "id": "li",
+      "name": "Li 服务",
+      "url": "https://li.liyueovo.top/",
+      "group": "网站",
+      "timeout_seconds": 20,
+      "expected_status": [
+        200,
+        204,
+        301,
+        302,
+        307,
+        308
+      ],
+      "ok": true,
+      "http_status": 200,
+      "response_ms": 988,
+      "error": null,
+      "last_check": "2026-10-26T12:07:50Z"
+    },
+    {
+      "id": "bl",
+      "name": "Bl 服务",
+      "url": "https://bl.liyueovo.top/",
+      "group": "网站",
+      "timeout_seconds": 20,
+      "expected_status": [
+        200,
+        204,
+        301,
+        302,
+        307,
+        308
+      ],
+      "ok": true,
+      "http_status": 200,
+      "response_ms": 1361,
+      "error": null,
+      "last_check": "2026-10-26T12:07:50Z"
+    },
+    {
+      "id": "tools",
+      "name": "工具面板",
+      "url": "https://u.liyueovo.top/",
+      "group": "服务",
+      "timeout_seconds": 20,
+      "expected_status": [
+        200,
+        204,
+        301,
+        302,
+        307,
+        308
+      ],
+      "ok": true,
+      "http_status": 200,
+      "response_ms": 1400,
+      "error": null,
+      "last_check": "2026-10-26T12:07:50Z"
+    },
+    {
+      "id": "pan",
+      "name": "网盘",
+      "url": "https://pan.liyueovo.top/",
+      "group": "服务",
+      "timeout_seconds": 20,
+      "expected_status": [
+        200,
+        204,
+        301,
+        302,
+        307,
+        308
+      ],
+      "ok": true,
+      "http_status": 200,
+      "response_ms": 1722,
+      "error": null,
+      "last_check": "2026-10-26T12:07:50Z"
+    }
+  ],
+  "events": []
+}

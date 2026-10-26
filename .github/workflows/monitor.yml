@@ -1,0 +1,59 @@
+name: Website monitoring
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - "config/monitors.json"
+      - "scripts/monitor.py"
+      - ".github/workflows/monitor.yml"
+permissions:
+  contents: write
+concurrency:
+  group: status-monitor
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Install crypto dependency for private monitors
+        run: pip install --quiet cryptography
+
+      - name: Run real HTTP checks
+        env:
+          FLUSH_INTERVAL_MINUTES: "30"
+          FORCE_FLUSH: ${{ github.event_name != 'schedule' && '1' || '0' }}
+          PRIVATE_MONITORS: ${{ secrets.PRIVATE_MONITORS }}
+          PRIVATE_PASSWORD: ${{ secrets.PRIVATE_PASSWORD }}
+        run: python3 scripts/monitor.py
+      - name: Send subscriber notifications for state changes
+        env:
+          MONITOR_API_URL: ${{ secrets.MONITOR_API_URL }}
+          MONITOR_SECRET: ${{ secrets.MONITOR_SECRET }}
+        run: |
+          if [ -z "$MONITOR_API_URL" ] || [ -z "$MONITOR_SECRET" ]; then
+            echo "Subscription notifications are not configured; skipping."
+          else
+            curl --fail-with-body --silent --show-error --max-time 30 \
+              -X POST "$MONITOR_API_URL/api/notify" \
+              -H "Content-Type: application/json" \
+              -H "X-Monitor-Secret: $MONITOR_SECRET" \
+              --data-binary @data/status.json
+          fi
+      - name: Commit monitoring data
+        run: |
+          if git diff --quiet -- data/status.json data/history.json; then
+            echo "No monitoring data changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/status.json data/history.json
+          git commit -m "chore: update real monitoring results"
+          git push

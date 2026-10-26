@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090909" id="theme-color"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Liyue 私有服务状态"><title>Liyue Private Status</title><link rel="stylesheet" href="./assets/style.css?v=20261026-4"></head>
+<body><main class="page"><header class="topbar"><a class="brand" href="./" aria-label="Liyue Status"><svg class="brand-logo" viewBox="0 0 40 30" aria-hidden="true"><path d="M4 12 1 6l8 3 4-6 3 8 8-2-4 8 5 5-10-1-4 5-3-7-8-1 4-6Z" fill="currentColor"/><path d="M19 5 25 1l-1 7 7-3-4 8 7 2-9 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Liyue</span></a><div class="actions"><a class="icon-btn" href="./" title="返回公开状态页" aria-label="返回公开状态页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6 15 12 9 18"/></svg></a><button id="theme" type="button" aria-label="切换主题" title="切换主题"><svg id="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg></button></div></header>
+
+<section id="lock" class="panel lock-panel"><div class="lock-body"><div class="lock-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h1>私有站点</h1><p>这部分数据以 AES-256-GCM 加密后存放，需要密码解锁。</p><form id="unlock-form" autocomplete="off"><input id="password" type="password" placeholder="输入密码" aria-label="密码" required autocomplete="current-password"><button id="unlock-btn" type="submit">解锁</button></form><p id="lock-msg" class="lock-msg"></p></div></section>
+
+<div id="content" hidden>
+<section id="banner" class="banner"><div id="banner-icon" class="banner-icon">✓</div><div><h1 id="overall">—</h1><p id="summary"></p></div></section>
+<section class="panel"><div class="panel-heading"><h2>私有服务</h2><button id="relock" class="lock-btn" type="button">锁定</button></div><div id="monitors" class="monitor-list"></div></section>
+<section class="panel"><div class="panel-heading"><h2>历史事件</h2></div><div id="events"></div></section>
+</div>
+
+<footer>Powered by <a href="https://github.com/Airliny/airliny-status" target="_blank" rel="noreferrer">Airliny Status</a></footer></main>
+<script src="./assets/private.js?v=20261026-4" defer></script></body></html>

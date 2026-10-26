@@ -1,0 +1,42 @@
+[
+  {
+    "id": "blog",
+    "name": "liyue博客",
+    "url": "https://liyueovo.top/",
+    "group": "网站",
+    "timeout_seconds": 20,
+    "expected_status": [200, 204, 301, 302, 307, 308]
+  },
+  {
+    "id": "li",
+    "name": "liyue小站",
+    "url": "https://li.liyueovo.top/",
+    "group": "网站",
+    "timeout_seconds": 20,
+    "expected_status": [200, 204, 301, 302, 307, 308]
+  },
+  {
+    "id": "bl",
+    "name": "Luminara blog",
+    "url": "https://bl.liyueovo.top/",
+    "group": "网站",
+    "timeout_seconds": 20,
+    "expected_status": [200, 204, 301, 302, 307, 308]
+  },
+  {
+    "id": "tools",
+    "name": "Umami",
+    "url": "https://u.liyueovo.top/",
+    "group": "服务",
+    "timeout_seconds": 20,
+    "expected_status": [200, 204, 301, 302, 307, 308]
+  },
+  {
+    "id": "pan",
+    "name": "网盘",
+    "url": "https://pan.liyueovo.top/",
+    "group": "服务",
+    "timeout_seconds": 20,
+    "expected_status": [200, 204, 301, 302, 307, 308]
+  }
+]
