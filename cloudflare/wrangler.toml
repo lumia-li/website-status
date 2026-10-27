@@ -1,6 +1,11 @@
 name = "airliny-status-subscriptions"
 main = "src/index.js"
 compatibility_date = "2026-10-26"
+workers_dev = false
+
+routes = [
+  { pattern = "status-api.liyueovo.top", custom_domain = true }
+]
 
 [[d1_databases]]
 binding = "DB"
