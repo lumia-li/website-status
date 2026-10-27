@@ -5,5 +5,5 @@ compatibility_date = "2026-10-26"
 [[d1_databases]]
 binding = "DB"
 database_name = "airliny-status-subscriptions"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "dddee849-fa4d-4b09-96be-b8b216f41d2c"
 migrations_dir = "migrations"

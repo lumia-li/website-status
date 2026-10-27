@@ -6,6 +6,19 @@ A bilingual static status page hosted on GitHub Pages. GitHub Actions checks mon
 
 This feature requires one-time setup. It is not live until the Cloudflare Worker is deployed, its secrets are set, and the two GitHub Actions secrets are added. Cloudflare and Resend free-plan limits/policies can change; verify current quotas before relying on notifications.
 
+The live status page is **https://status.liyueovo.top**, so the Worker only accepts browser requests from that origin (plus `http://localhost:8788` / `http://localhost:5173` for local testing).
+
+### 0. One-shot setup (recommended)
+
+Windows + PowerShell, from the `cloudflare` folder:
+
+```powershell
+cd cloudflare
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+The script logs in to Cloudflare, creates/reuses the D1 database, writes `database_id` into `wrangler.toml`, applies the schema, sets every secret, deploys the Worker, fills the Worker URL back into `assets/app.js` (and bumps the cache-busting version in `index.html`), then prints the two GitHub Actions secrets you still need to add.
+
 ### 1. Create Cloudflare D1 database
 
 1. Sign in to Cloudflare and open **Workers & Pages → D1 SQL Database → Create database**.
@@ -13,7 +26,21 @@ This feature requires one-time setup. It is not live until the Cloudflare Worker
 3. Open the database's **Console** and run the complete SQL in [cloudflare/migrations/0001_init.sql](cloudflare/migrations/0001_init.sql).
 4. Copy the database ID into `cloudflare/wrangler.toml` replacing `REPLACE_WITH_YOUR_D1_DATABASE_ID`.
 
-### 2. Check Alibaba Cloud DirectMail SMTP details
+### 2. Choose a mail transport
+
+The Worker supports two transports and picks one automatically: **Resend** when `RESEND_API_KEY` exists, otherwise **SMTP**.
+
+#### Option A: Resend API (recommended)
+
+1. Create an account at `https://resend.com` and add `liyueovo.top` under **Domains**.
+2. Copy the DNS records Resend shows into Cloudflare. They live on the `send.` and `resend._domainkey.` subdomains, so your existing MX records (Tencent Exmail `mxbiz1/2.qq.com`) stay untouched — do not replace the apex MX.
+3. Wait until the domain shows **Verified**.
+4. Create an API key with **Sending access** and store it as a Worker secret: `wrangler secret put RESEND_API_KEY`.
+5. Set `FROM_EMAIL` to an address on that domain, e.g. `status@liyueovo.top`.
+
+No mailbox password and no SMTP port are needed, DKIM is aligned automatically, and it sidesteps the "Cloudflare egress IP is not inside the SPF record" problem described below.
+
+#### Option B: SMTP mailbox
 
 In Alibaba Cloud DirectMail, open **Mail Settings → Sender Addresses** and confirm SMTP sending is enabled and an SMTP password is configured. Use the endpoint for the region selected in your console. Current documented endpoints include:
 
@@ -21,6 +48,8 @@ In Alibaba Cloud DirectMail, open **Mail Settings → Sender Addresses** and con
 - Singapore: `smtpdm-ap-southeast-1.aliyuncs.com`
 - US East (Virginia): `smtpdm-us-east-1.aliyuncs.com`
 - Germany (Frankfurt): `smtpdm-eu-central-1.aliyuncs.com`
+
+Any other provider with implicit TLS on port 465 works too. For Tencent Exmail (腾讯企业邮箱): host `smtp.exmail.qq.com`, port `465`, username = the mailbox address, password = the mailbox password (or a client-specific password from 安全设置). For QQ/163 personal mailboxes: `smtp.qq.com` / `smtp.163.com` with an authorization code.
 
 This Worker uses implicit TLS on **port 465**. Cloudflare Workers blocks outbound TCP port 25, so do not configure port 25. Use the exact SMTP host and sender credentials from your DirectMail region. The SMTP username is usually the sender address, but follow the value shown in your console. Never paste credentials into chat or commit them to Git.
 
@@ -37,6 +66,7 @@ wrangler login
 wrangler d1 list
 # Edit wrangler.toml and set database_id first
 wrangler secret put SMTP_HOST
+wrangler secret put SMTP_PORT
 wrangler secret put SMTP_USERNAME
 wrangler secret put SMTP_PASSWORD
 wrangler secret put FROM_EMAIL
@@ -45,11 +75,11 @@ wrangler secret put MONITOR_SECRET
 wrangler deploy
 ```
 
-Use a long random value for `MONITOR_SECRET` and keep it private. For `SITE_URL`, use `https://airliny.github.io/airliny-status`. When Wrangler asks for each secret, paste the value; do not commit it. The Worker URL will look like `https://airliny-status-subscriptions.<your-account>.workers.dev`.
+Use a long random value for `MONITOR_SECRET` and keep it private. For `SITE_URL`, use `https://status.liyueovo.top`. When Wrangler asks for each secret, paste the value; do not commit it. The Worker URL will look like `https://airliny-status-subscriptions.<your-account>.workers.dev`.
 
 ### 4. Connect the static page
 
-In `assets/app.js`, replace `https://REPLACE-WITH-YOUR-WORKER.workers.dev` in `SUBSCRIBE_API` with your deployed Worker URL, then commit and push. GitHub Pages will redeploy the frontend.
+In `assets/app.js`, replace `https://REPLACE-WITH-YOUR-WORKER.workers.dev` in `SUBSCRIBE_API` with your deployed Worker URL, then commit and push. GitHub Pages will redeploy the frontend. (`setup.ps1` does this step for you.)
 
 ### 5. Add GitHub Actions secrets
 
@@ -62,7 +92,7 @@ The monitor workflow calls the Worker after each check. The Worker sends mail on
 
 ### 6. Test
 
-- Visit the status page, click **Subscribe**, enter your email and submit.
+- Visit the status page, click **订阅更新**, enter your email and submit.
 - Open the confirmation email and click the confirmation link.
 - Test notification flow by temporarily changing a monitored site's expected status only if you control that endpoint, or use a dedicated test monitor; restore the configuration afterwards.
 - Use the unsubscribe link in an email to remove the address.
@@ -88,6 +118,7 @@ The scheduled workflow uses `*/5 * * * *`; GitHub may delay scheduled runs. The 
 - `data/status.json`: latest actual checks and state-change events
 - `data/history.json`: daily observed uptime counters
 - `scripts/monitor.py`: real HTTP checker
+- `scripts/test_smtp.py`: SMTP credential self-test (run it before deploying the Worker)
 - `.github/workflows/monitor.yml`: five-minute checks and optional email notifications
 - `cloudflare/src/index.js`: subscribe, confirm, unsubscribe, and notification API
 - `cloudflare/migrations/0001_init.sql`: D1 schema
