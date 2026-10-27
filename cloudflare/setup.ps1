@@ -202,9 +202,20 @@ Set-Secret "MONITOR_SECRET" $monitorSecret
 Step "6/8 正式部署 Worker"
 $deploy = Run-Wrangler @("deploy") -AllowFail
 if ($script:WranglerExitCode -ne 0) { Write-Host $deploy -ForegroundColor DarkGray; Die "部署失败，请查看上方输出" }
-$urls = [regex]::Matches($deploy, 'https://[a-zA-Z0-9\.-]+\.workers\.dev') | ForEach-Object { $_.Value } | Select-Object -Unique
-$workerUrl = $urls | Where-Object { $_ -like "*$WorkerName*" } | Select-Object -First 1
-if (-not $workerUrl) { $workerUrl = $urls | Select-Object -First 1 }
+$workerUrl = ""
+# 优先使用 wrangler.toml 里绑定的自定义域名
+if ($deploy -match '([a-zA-Z0-9\.-]+)\s+\(custom domain\)') { $workerUrl = "https://" + $Matches[1] }
+if (-not $workerUrl) {
+    $urls = [regex]::Matches($deploy, 'https://[a-zA-Z0-9\.-]+\.workers\.dev') | ForEach-Object { $_.Value } | Select-Object -Unique
+    $workerUrl = $urls | Where-Object { $_ -like "*$WorkerName*" } | Select-Object -First 1
+    if (-not $workerUrl) { $workerUrl = $urls | Select-Object -First 1 }
+}
+if (-not $workerUrl) {
+    if (Test-Path $TomlPath) {
+        $tomlText = Get-Content $TomlPath -Raw -Encoding UTF8
+        if ($tomlText -match 'pattern\s*=\s*"([^"]+)"') { $workerUrl = "https://" + $Matches[1] }
+    }
+}
 if (-not $workerUrl) { Write-Host $deploy -ForegroundColor DarkGray; Die "未解析到 Worker 地址，请查看上方输出" }
 Ok "Worker 已上线：$workerUrl"
 
