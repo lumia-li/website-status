@@ -97,6 +97,17 @@ The monitor workflow calls the Worker after each check. The Worker sends mail on
 - Test notification flow by temporarily changing a monitored site's expected status only if you control that endpoint, or use a dedicated test monitor; restore the configuration afterwards.
 - Use the unsubscribe link in an email to remove the address.
 
+### 7. Subscriber admin page
+
+Open `https://status-api.liyueovo.top/admin?token=<ADMIN_TOKEN>` to list every subscriber (address, verification state, language, timestamps), delete a single subscriber, or export `&format=csv`. The key is separate from `MONITOR_SECRET`; set it with:
+
+```bash
+cd cloudflare
+wrangler secret put ADMIN_TOKEN
+```
+
+Requests without a matching token return 403. Rotate the key at any time by writing a new value to the same secret — no redeploy needed.
+
 ### Security and operational notes
 
 - Pending subscriptions require email confirmation; unsubscribe links contain unguessable random tokens.
