@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-30T01:11:21Z",
+  "generated_at": "2026-10-30T07:11:24Z",
   "monitors": [
     {
       "id": "blog",
@@ -15,11 +15,11 @@
         307,
         308
       ],
-      "ok": true,
-      "http_status": 200,
-      "response_ms": 446,
-      "error": null,
-      "last_check": "2026-10-30T01:11:21Z"
+      "ok": false,
+      "http_status": null,
+      "response_ms": 280,
+      "error": "URLError: <urlopen error [Errno -2] Name or service not known>",
+      "last_check": "2026-10-30T07:11:24Z"
     },
     {
       "id": "li",
@@ -37,9 +37,9 @@
       ],
       "ok": true,
       "http_status": 200,
-      "response_ms": 558,
+      "response_ms": 637,
       "error": null,
-      "last_check": "2026-10-30T01:11:21Z"
+      "last_check": "2026-10-30T07:11:24Z"
     },
     {
       "id": "bl",
@@ -57,9 +57,9 @@
       ],
       "ok": true,
       "http_status": 200,
-      "response_ms": 638,
+      "response_ms": 845,
       "error": null,
-      "last_check": "2026-10-30T01:11:21Z"
+      "last_check": "2026-10-30T07:11:24Z"
     },
     {
       "id": "tools",
@@ -77,9 +77,9 @@
       ],
       "ok": true,
       "http_status": 200,
-      "response_ms": 346,
+      "response_ms": 364,
       "error": null,
-      "last_check": "2026-10-30T01:11:21Z"
+      "last_check": "2026-10-30T07:11:24Z"
     },
     {
       "id": "pan",
@@ -97,12 +97,20 @@
       ],
       "ok": true,
       "http_status": 200,
-      "response_ms": 737,
+      "response_ms": 812,
       "error": null,
-      "last_check": "2026-10-30T01:11:21Z"
+      "last_check": "2026-10-30T07:11:24Z"
     }
   ],
   "events": [
+    {
+      "at": "2026-10-30T07:11:24Z",
+      "monitor_id": "blog",
+      "name": "liyue博客",
+      "type": "down",
+      "http_status": null,
+      "error": "URLError: <urlopen error [Errno -2] Name or service not known>"
+    },
     {
       "at": "2026-10-27T01:52:57Z",
       "monitor_id": "pan",
