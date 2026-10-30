@@ -4,7 +4,7 @@
     {
       "id": "blog",
       "name": "liyue博客",
-      "url": "https://liyueovo.top/",
+      "url": "https://blog.liyueovo.top/",
       "group": "网站",
       "timeout_seconds": 20,
       "expected_status": [
