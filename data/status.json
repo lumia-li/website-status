@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-25T23:11:46Z",
+  "generated_at": "2026-11-26T05:07:44Z",
   "monitors": [
     {
       "id": "blog",
@@ -17,9 +17,9 @@
       ],
       "ok": true,
       "http_status": 200,
-      "response_ms": 331,
+      "response_ms": 93,
       "error": null,
-      "last_check": "2026-11-25T23:11:46Z"
+      "last_check": "2026-11-26T05:07:44Z"
     },
     {
       "id": "li",
@@ -37,9 +37,9 @@
       ],
       "ok": true,
       "http_status": 200,
-      "response_ms": 242,
+      "response_ms": 171,
       "error": null,
-      "last_check": "2026-11-25T23:11:46Z"
+      "last_check": "2026-11-26T05:07:44Z"
     },
     {
       "id": "bl",
@@ -57,9 +57,9 @@
       ],
       "ok": true,
       "http_status": 200,
-      "response_ms": 519,
+      "response_ms": 261,
       "error": null,
-      "last_check": "2026-11-25T23:11:46Z"
+      "last_check": "2026-11-26T05:07:44Z"
     },
     {
       "id": "tools",
@@ -77,9 +77,9 @@
       ],
       "ok": true,
       "http_status": 200,
-      "response_ms": 450,
+      "response_ms": 292,
       "error": null,
-      "last_check": "2026-11-25T23:11:46Z"
+      "last_check": "2026-11-26T05:07:44Z"
     },
     {
       "id": "pan",
@@ -97,9 +97,9 @@
       ],
       "ok": true,
       "http_status": 200,
-      "response_ms": 740,
+      "response_ms": 888,
       "error": null,
-      "last_check": "2026-11-25T23:11:46Z"
+      "last_check": "2026-11-26T05:07:44Z"
     }
   ],
   "events": [
